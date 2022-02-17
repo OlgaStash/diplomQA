@@ -16,10 +16,10 @@ public class Api {
             .log(LogDetail.ALL)
             .build();
 
-    public static String fillPaymentFormByDebitCard(DataHelper.Card card) {
+    public static String fillPaymentFormByDebitCard(DataHelper.CardInfo cardInfo) {
         String response = given()
                 .spec(requestSpec)
-                .body(card)
+                .body(cardInfo)
                 .when()
                 .post("/api/v1/pay")
                 .then().log().all()
@@ -29,10 +29,10 @@ public class Api {
         return response;
     }
 
-    public static String fillPaymentFormByCreditCard(DataHelper.Card card) {
+    public static String fillPaymentFormByCreditCard(DataHelper.CardInfo cardInfo) {
         String response = given()
                 .spec(requestSpec)
-                .body(card)
+                .body(cardInfo)
                 .when()
                 .post("/api/v1/credit")
                 .then().log().all()

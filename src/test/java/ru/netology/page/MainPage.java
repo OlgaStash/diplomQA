@@ -13,10 +13,11 @@ public class MainPage {
     private final SelenideElement buttonBuyByCredit = $(byText("Купить в кредит"));
 
     public CardData selectByDebitCard() {
-    buttonBuyByDebit.click();
-    modePaymentHeader.shouldHave(exactText("Оплата по карте"));
-    return new CardData();
+        buttonBuyByDebit.click();
+        modePaymentHeader.shouldHave(exactText("Оплата по карте"));
+        return new CardData();
     }
+
     public CardData selectByCreditCard() {
         buttonBuyByCredit.click();
         modePaymentHeader.shouldHave(exactText("Кредит по данным карты"));

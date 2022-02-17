@@ -1,151 +1,86 @@
 package ru.netology.data;
 
 import com.github.javafaker.Faker;
-import lombok.RequiredArgsConstructor;
 import lombok.Value;
 
-import java.time.LocalDate;
-import java.time.Year;
 import java.util.Locale;
 
 public class DataHelper {
+    static Faker faker = new Faker(new Locale("en"));
+    //    static Random random = new Random();
+    //    static int cvc = (int) (100 + Math.random() * 899);
+    static String correctCVC = Integer.toString((int) (100 + Math.random() * 899));
+    //    static int monthNumber = (int) (1 + Math.random()*8);
+    static String wrongMonthNumber = Integer.toString((int) (1 + Math.random() * 8));
+    //    static int year = (int) (15 + Math.random() * 6);
+    static String wrongYear = Integer.toString((int) (15 + Math.random() * 6));
 
     public DataHelper() {
     }
 
+    public static CardInfo getValidCardInfo() {
+        return new CardInfo("4444 4444 4444 4441", "22", "08", faker.name().fullName(), correctCVC);
+    }
+
+    public static CardInfo getInvalidCardInfo() {
+        return new CardInfo("4444 4444 4444 4442", "22", "08", faker.name().fullName(), correctCVC);
+    }
+
+    public static CardInfo getCardInfoWithWrongLongCardNumber() {
+
+        return new CardInfo("1111 1111 1111 1111 1111", "22", "08", faker.name().fullName(), correctCVC);
+    }
+
+    public static CardInfo getCardInfoWithEmptyCardNumber() {
+
+        return new CardInfo("", "22", "08", faker.name().fullName(), correctCVC);
+    }
+
+    public static CardInfo getCardInfoWithShortestCardNumber() {
+
+        return new CardInfo(wrongMonthNumber, "22", "11", faker.name().fullName(), correctCVC);
+    }
+
+    public static CardInfo getCardInfoWithWrongMonth() {
+        return new CardInfo("4444 4444 4444 4441", "22", wrongMonthNumber, faker.name().fullName(), correctCVC);
+    }
+
+    public static CardInfo getValidCardInfoWithEmptyMonth() {
+        return new CardInfo("4444 4444 4444 4441", "22", "", faker.name().fullName(), correctCVC);
+    }
+
+    public static CardInfo getCardInfoWithWrongYear() {
+        return new CardInfo("4444 4444 4444 4441", wrongYear, "12", faker.name().fullName(), correctCVC);
+    }
+
+    public static CardInfo getValidCardInfoWithEmptyYear() {
+        return new CardInfo("4444 4444 4444 4441", "", "08", faker.name().fullName(), correctCVC);
+    }
+
+    public static CardInfo getCardInfoWithWrongYearWithOneNumber() {
+        return new CardInfo("4444 4444 4444 4441", wrongMonthNumber, "12", faker.name().fullName(), correctCVC);
+    }
+
+    public static CardInfo getCardInfoWithWrongCvc() {
+        return new CardInfo("4444 4444 4444 4441", "22", "11", faker.name().fullName(), wrongYear);
+    }
+
+    public static CardInfo getValidCardInfoWithEmptyCvc() {
+        return new CardInfo("4444 4444 4444 4441", "22", "09", faker.name().fullName(), "");
+    }
+
+    public static CardInfo getCardInfoWithWrongHolderName() {
+        return new CardInfo("4444 4444 4444 4441", "22", "11", "000", correctCVC);
+    }
+
+    public static CardInfo getCardInfoEmptyName() {
+        return new CardInfo("4444 4444 4444 4441", "22", "11", " ", correctCVC);
+    }
+
+
     @Value
-    @RequiredArgsConstructor
-    public static class Card {
-        private String cardNumber;
-        private String month;
-        private String year;
-        private String holder;
-        private String cvv;
-    }
+    public static class CardInfo {
+        private String number, year, month, holder, cvc;
 
-    private static
-    Faker faker = new Faker(new Locale("en"));
-
-    //Номер карты
-    public static String getApprovedCardNumber() {
-        return ("4444 4444 4444 4441");
-    }
-
-    public static String getDeclinedCardNumber() {
-        return ("4444 4444 4444 4442");
-    }
-
-    public static String getWrongCardNumber() {
-        return ("1111 1111 1111 1111 1111");
-    }
-
-    public static String getWithZerosCardNumber() {
-        return ("0000 0000 0000 0000");
-    }
-
-    public static String getCardNumberWithEmptyField() {
-        return ("");
-    }
-
-    //Месяц
-    public static String getValidMonth() {
-        LocalDate localDate = LocalDate.now();
-        return String.format("%02d", localDate.getMonthValue());
-    }
-
-    public static String getInvalidMonth() {
-        return ("13");
-    }
-
-    public static String getMonthOneDigit() {
-        return ("8");
-    }
-
-    public static String getMonthWithZeros() {
-        return ("00");
-    }
-
-    public static String getMonthWithEmptyField() {
-        return ("");
-    }
-
-    //Год
-    public static String getValidYear() {
-        return String.format("%ty", Year.now());
-    }
-
-    public static String getPastYear() {
-        LocalDate localDate = LocalDate.now();
-        return String.format("%ty", localDate.minusYears(1));
-    }
-
-    public static String getYeahOneDigit() {
-        return ("2");
-    }
-
-    public static String getLastYear() {
-        LocalDate localDate = LocalDate.now();
-        return String.format("%ty", localDate.plusYears(1));
-    }
-
-    public static String get25Year() {
-        LocalDate localDate = LocalDate.now();
-        return String.format("%ty", localDate.plusYears(3));
-    }
-
-    public static String getYearEmptyField() {
-        return ("");
-    }
-
-    //Владелец
-    public static String getValidName() {
-        return faker.name().fullName();
-    }
-
-    public static String getRussianName() {
-        Faker faker = new Faker(new Locale("ru"));
-        return faker.name().fullName();
-    }
-
-    public static String getNameWithDigits() {
-        return "55555555";
-    }
-
-    public static String getNameWithSigns() {
-        return "***&*^*^&^%^^&";
-    }
-
-    public static String getNameOne() {
-        return faker.name().firstName();
-    }
-
-    public static String getOneLetter() {
-        return "W";
-    }
-
-    public static String getOwnerNameLong() {
-        return "Verylonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglonglong";
-    }
-
-    public static String getNameEmptyField() {
-        return "";
-    }
-
-    //CVC/CVV
-
-    public static String getCVC() {
-        return "999";
-    }
-
-    public static String getCVCOneDigit() {
-        return "2";
-    }
-
-    public static String getCVCTwoDigits() {
-        return "12";
-    }
-
-    public static String getCVCEmptyField() {
-        return "";
     }
 }

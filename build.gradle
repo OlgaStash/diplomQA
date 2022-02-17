@@ -11,12 +11,11 @@ compileTestJava.options.encoding = "UTF-8"
 
 repositories {
     mavenCentral()
+    jcenter()
 }
 
 dependencies {
-    implementation 'org.jetbrains:annotations:20.1.0'
     testImplementation 'org.junit.jupiter:junit-jupiter:5.8.2'
-    testImplementation 'mysql:mysql-connector-java:8.0.25'
     testImplementation 'com.github.javafaker:javafaker:1.0.2'
     testImplementation 'commons-dbutils:commons-dbutils:1.7'
     testImplementation 'mysql:mysql-connector-java:8.0.27'
@@ -27,10 +26,16 @@ dependencies {
     testImplementation 'com.google.code.gson:gson:2.8.9'
     testImplementation 'org.slf4j:slf4j-api:1.7.35'
     testImplementation 'io.qameta.allure:allure-selenide:2.17.2'
+    testImplementation 'org.postgresql:postgresql:42.2.18'
+    testImplementation 'org.hamcrest:hamcrest-library:2.2'
+
 }
 
 test {
     useJUnitPlatform()
     systemProperty 'selenide.headless', System.getProperty('selenide.headless')
     systemProperties['selenide.headless'] = 'true'
+    systemProperty 'file.encoding', 'UTF-8'
+    systemProperty 'db.url', System.getProperty('db.url', 'jdbc:mysql://192.168.99.100:3306/app')
+    systemProperty "app.url", System.getProperty("app.url", "http://localhost:8080")
 }
