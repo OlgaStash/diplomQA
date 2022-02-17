@@ -7,7 +7,7 @@
 - для базы данных MySQL выполнив команду:  <code>java -jar artifacts/aqa-shop.jar -Dspring.datasource.url=jdbc:mysql://localhost:3306/app</code>;
 
 - для базы данных PostgreSQL выполнив команду:  <code>java -jar artifacts/aqa-shop.jar -Dspring.datasource.url=jdbc:postgresql://localhost:5432/postgres</code>.
-4. Запустить тесты выполнив команду: <code>.\gradlew test</code.
+4. Запустить тесты выполнив команду: <code>.\gradlew test</code>.
 
 ### Необходимое ПО:
 1. Docker 
