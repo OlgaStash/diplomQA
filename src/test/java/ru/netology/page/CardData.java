@@ -6,7 +6,7 @@ import ru.netology.data.DataHelper;
 
 import java.time.Duration;
 
-import static com.codeborne.selenide.Condition.exactText;
+import static com.codeborne.selenide.Selectors.withText;
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.$$;
 
@@ -18,8 +18,10 @@ public class CardData {
     private final SelenideElement cvcField = $("[placeholder='999']");
     private final SelenideElement buttonContinue = $$(".button__text").find(Condition.text("Продолжить"));
 
-    private final SelenideElement successNotification = $$(".notification__content").find(Condition.text("Операция одобрена Банком."));
-    private final SelenideElement errorNotification = $$(".notification__content").find(Condition.text("Ошибка! Банк отказал в проведении операции."));
+    private final SelenideElement successNotification = $(withText("Успешно"));
+    //$$(".notification__content").find(Condition.text("Операция одобрена Банком."));
+    private final SelenideElement errorNotification = $(withText("Ошибка"));
+    //$$(".notification__content").find(Condition.text("Ошибка! Банк отказал в проведении операции."));
     private final SelenideElement wrongFormat = $$(".input__sub").find(Condition.text("Неверный формат"));
     private final SelenideElement emptyField = $$(".input__sub").find(Condition.text("Поле обязательно для заполнения"));
     private final SelenideElement cardExpired = $$(".input__sub").find(Condition.text("Истёк срок действия карты"));

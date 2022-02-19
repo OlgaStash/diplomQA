@@ -2,7 +2,6 @@ package ru.netology.test;
 
 import com.codeborne.selenide.logevents.SelenideLogger;
 import io.qameta.allure.selenide.AllureSelenide;
-import lombok.SneakyThrows;
 import lombok.val;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
@@ -12,12 +11,15 @@ import ru.netology.data.DataHelper;
 import ru.netology.data.SqlUtil;
 import ru.netology.page.MainPage;
 
+import java.sql.SQLException;
+
 import static com.codeborne.selenide.Selenide.open;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class UiTest {
+
     @BeforeAll
     static void setUpAll() {
         SelenideLogger.addListener("allure", new AllureSelenide());
@@ -34,9 +36,8 @@ public class UiTest {
         SelenideLogger.removeListener("allure");
     }
 
-    @SneakyThrows
     @Test
-    void shouldCheckSuccessValidDebitCard() {
+    void shouldCheckSuccessValidDebitCard() throws SQLException {
         val mainPage = new MainPage();
         val CardData = mainPage.selectByDebitCard();
         val validCardInfo = DataHelper.getValidCardInfo();
@@ -46,13 +47,12 @@ public class UiTest {
         val statusForPaymentByDebitCard = SqlUtil.getStatusDebitCard(paymentId);
         val paymentAmount = SqlUtil.getStatusDebitCard(paymentId);
         assertEquals("APPROVED", statusForPaymentByDebitCard);
-        assertEquals("4500000", paymentAmount);//???
+        assertEquals("4500000", paymentAmount);
 
     }
 
-    @SneakyThrows
     @Test
-    void shouldCheckSuccessValidCreditCard() {
+    void shouldCheckSuccessValidCreditCard() throws SQLException {
         val mainPage = new MainPage();
         val CardData = mainPage.selectByCreditCard();
         val validCardInfo = DataHelper.getValidCardInfo();
@@ -63,9 +63,8 @@ public class UiTest {
         assertEquals("APPROVED", statusForPaymentByCreditCard);
     }
 
-    @SneakyThrows
     @Test
-    void shouldCheckErrorWithInvalidDebitCard() {
+    void shouldCheckErrorWithInvalidDebitCard() throws SQLException {
         val mainPage = new MainPage();
         val CardData = mainPage.selectByDebitCard();
         val invalidCardInfo = DataHelper.getInvalidCardInfo();
@@ -76,9 +75,8 @@ public class UiTest {
         assertThat(statusForPaymentByDebitCard, equalTo("DECLINED"));
     }
 
-    @SneakyThrows
     @Test
-    void shouldCheckErrorWithInvalidCreditCard(){
+    void shouldCheckErrorWithInvalidCreditCard() throws SQLException {
         val mainPage = new MainPage();
         val CardData = mainPage.selectByCreditCard();
         val invalidCardInfo = DataHelper.getInvalidCardInfo();
@@ -90,15 +88,15 @@ public class UiTest {
     }
 
     @Test
-    void shouldCheckErrorFormatWithLongCardNumber() {
+    void shouldCheckErrorFormatDifferentCardNumber() {
         val mainPage = new MainPage();
         val CardData = mainPage.selectByCreditCard();
-        val invalidCardInfo = DataHelper.getCardInfoWithWrongLongCardNumber();
+        val invalidCardInfo = DataHelper.getCardInfoWithWrongDifferentCardNumber();
         CardData.inputData(invalidCardInfo);
-        CardData.waitErrorFormat();
+        CardData.waitErrorPayment();
         val CardData2 = mainPage.selectByDebitCard();
         CardData2.inputData(invalidCardInfo);
-        CardData2.waitErrorFormat();
+        CardData2.waitErrorPayment();
     }
 
     @Test
@@ -119,10 +117,10 @@ public class UiTest {
         val CardData = mainPage.selectByCreditCard();
         val invalidCardInfo = DataHelper.getCardInfoWithEmptyCardNumber();
         CardData.inputData(invalidCardInfo);
-        CardData.waitErrorEmptyField();
+        CardData.waitErrorFormat();
         val CardData2 = mainPage.selectByDebitCard();
         CardData2.inputData(invalidCardInfo);
-        CardData2.waitErrorEmptyField();
+        CardData2.waitErrorFormat();
     }
 
     @Test
@@ -143,10 +141,10 @@ public class UiTest {
         val CardData = mainPage.selectByCreditCard();
         val invalidCardInfo = DataHelper.getValidCardInfoWithEmptyMonth();
         CardData.inputData(invalidCardInfo);
-        CardData.waitErrorEmptyField();
+        CardData.waitErrorFormat();
         val CardData2 = mainPage.selectByDebitCard();
         CardData2.inputData(invalidCardInfo);
-        CardData2.waitErrorEmptyField();
+        CardData2.waitErrorFormat();
     }
 
     @Test
@@ -162,15 +160,15 @@ public class UiTest {
     }
 
     @Test
-    void shouldCheckErrorFormatWithWrongYearFromOneNumber() { //???
+    void shouldCheckErrorFormatWhereYearMoreLimit30() { //Проверка при установке года больше, чем возможный срок карты +5 лет от настоящего
         val mainPage = new MainPage();
         val CardData = mainPage.selectByCreditCard();
-        val invalidCardInfo = DataHelper.getCardInfoWithWrongYearWithOneNumber();
+        val invalidCardInfo = DataHelper.getCardInfoWithWrongYearMoreLimit();
         CardData.inputData(invalidCardInfo);
-        CardData.waitErrorFormat();
+        CardData.waitErrorCardLimit();
         val CardData2 = mainPage.selectByDebitCard();
         CardData2.inputData(invalidCardInfo);
-        CardData2.waitErrorFormat();
+        CardData2.waitErrorCardLimit();
     }
 
     @Test
@@ -179,10 +177,10 @@ public class UiTest {
         val CardData = mainPage.selectByCreditCard();
         val invalidCardInfo = DataHelper.getValidCardInfoWithEmptyYear();
         CardData.inputData(invalidCardInfo);
-        CardData.waitErrorEmptyField();
+        CardData.waitErrorFormat();
         val CardData2 = mainPage.selectByDebitCard();
         CardData2.inputData(invalidCardInfo);
-        CardData2.waitErrorEmptyField();
+        CardData2.waitErrorFormat();
     }
 
     @Test
@@ -203,17 +201,17 @@ public class UiTest {
         val CardData = mainPage.selectByCreditCard();
         val invalidCardInfo = DataHelper.getValidCardInfoWithEmptyCvc();
         CardData.inputData(invalidCardInfo);
-        CardData.waitErrorEmptyField();
+        CardData.waitErrorFormat();
         val CardData2 = mainPage.selectByDebitCard();
         CardData2.inputData(invalidCardInfo);
-        CardData2.waitErrorEmptyField();
+        CardData2.waitErrorFormat();
     }
 
     @Test
-    void shouldCheckErrorFormatWithWrongName() {
+    void shouldCheckErrorFormatDigitName() {
         val mainPage = new MainPage();
         val CardData = mainPage.selectByCreditCard();
-        val invalidCardInfo = DataHelper.getCardInfoWithWrongHolderName();
+        val invalidCardInfo = DataHelper.getCardInfoWithWrongHolderNameDigit();
         CardData.inputData(invalidCardInfo);
         CardData.waitErrorFormat();
         val CardData2 = mainPage.selectByDebitCard();
@@ -231,5 +229,41 @@ public class UiTest {
         val CardData2 = mainPage.selectByDebitCard();
         CardData2.inputData(invalidCardInfo);
         CardData2.waitErrorEmptyField();
+    }
+
+    @Test
+    void shouldCheckErrorSpecialSymbolFieldName() {
+        val mainPage = new MainPage();
+        val CardData = mainPage.selectByCreditCard();
+        val invalidCardInfo = DataHelper.getCardInfoWithWrongHolderNameSpecialSymbol();
+        CardData.inputData(invalidCardInfo);
+        CardData.waitErrorFormat();
+        val CardData2 = mainPage.selectByDebitCard();
+        CardData2.inputData(invalidCardInfo);
+        CardData2.waitErrorFormat();
+    }
+
+    @Test
+    void shouldCheckErrorRussianLettersFieldName() {
+        val mainPage = new MainPage();
+        val CardData = mainPage.selectByCreditCard();
+        val invalidCardInfo = DataHelper.getCardInfoWithWrongHolderNameRussianLetters();
+        CardData.inputData(invalidCardInfo);
+        CardData.waitErrorFormat();
+        val CardData2 = mainPage.selectByDebitCard();
+        CardData2.inputData(invalidCardInfo);
+        CardData2.waitErrorFormat();
+    }
+
+    @Test
+    void shouldCheckErrorOneWordFieldName() {
+        val mainPage = new MainPage();
+        val CardData = mainPage.selectByCreditCard();
+        val invalidCardInfo = DataHelper.getCardInfoWithWrongHolderNameOneWord();
+        CardData.inputData(invalidCardInfo);
+        CardData.waitErrorFormat();
+        val CardData2 = mainPage.selectByDebitCard();
+        CardData2.inputData(invalidCardInfo);
+        CardData2.waitErrorFormat();
     }
 }

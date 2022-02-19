@@ -1,6 +1,5 @@
 package ru.netology.data;
 
-import lombok.SneakyThrows;
 import lombok.val;
 
 import java.sql.Connection;
@@ -8,10 +7,6 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 
 public class SqlUtil {
-
-    private SqlUtil() {
-    }
-
 
     public static Connection getConnection() throws SQLException {
         String dbUrl = System.getProperty("db.url");
@@ -50,22 +45,6 @@ public class SqlUtil {
         return status;
     }
 
-
-    public static String getStatusCreditCard(String payment_id) throws SQLException {
-        String statusSQL = "SELECT status FROM credit_request_entity WHERE bank_id =?; ";
-        String status = null;
-        try (val conn = getConnection();
-             val statusStmt = conn.prepareStatement(statusSQL)) {
-            statusStmt.setString(1, payment_id);
-            try (val rs = statusStmt.executeQuery()) {
-                if (rs.next()) {
-                    status = rs.getString("status");
-                }
-            }
-        }
-        return status;
-    }
-
     public static String getPaymentAmount(String payment_id) throws SQLException {
         String amountSQL = "SELECT amount FROM payment_entity WHERE transaction_id =?; ";
         String amount = null;
@@ -81,19 +60,19 @@ public class SqlUtil {
         return amount;
     }
 
-//    public static void cleanData() throws SQLException {
-//        val pays = "DELETE FROM payment_entity";
-//        val credits = "DELETE FROM credit_request_entity";
-//        val orders = "DELETE FROM order_entity";
-//        try (val conn = SqlUtil.getConnection();
-//             val prepareStatPay = conn.createStatement();
-//             val prepareStatCredit = conn.createStatement();
-//             val prepareStatOrder = conn.createStatement();
-//        ) {
-//            prepareStatPay.executeUpdate(pays);
-//            prepareStatCredit.executeUpdate(credits);
-//            prepareStatOrder.executeUpdate(orders);
-//        }
-//    }
+    public static String getStatusCreditCard(String payment_id) throws SQLException {
+        String statusSQL = "SELECT status FROM credit_request_entity WHERE bank_id =?; ";
+        String status = null;
+        try (val conn = getConnection();
+             val statusStmt = conn.prepareStatement(statusSQL)) {
+            statusStmt.setString(1, payment_id);
+            try (val rs = statusStmt.executeQuery()) {
+                if (rs.next()) {
+                    status = rs.getString("status");
+                }
+            }
+        }
+        return status;
+    }
 }
 
