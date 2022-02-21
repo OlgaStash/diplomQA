@@ -45,7 +45,7 @@ public class UiTest {
         CardData.waitSuccessPayment();
         val paymentId = SqlUtil.getPaymentId();
         val statusForPaymentByDebitCard = SqlUtil.getStatusDebitCard(paymentId);
-        val paymentAmount = SqlUtil.getStatusDebitCard(paymentId);
+        val paymentAmount = SqlUtil.getPaymentAmount(paymentId);
         assertEquals("APPROVED", statusForPaymentByDebitCard);
         assertEquals("4500000", paymentAmount);
 
