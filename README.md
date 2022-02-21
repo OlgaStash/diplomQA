@@ -8,6 +8,8 @@
 
 - для базы данных PostgreSQL выполнив команду:  <code>java -jar artifacts/aqa-shop.jar -Dspring.datasource.url=jdbc:postgresql://localhost:5432/postgres</code>.
 4. Запустить тесты выполнив команду: <code>.\gradlew test</code>.
+5. Сформировать отчет (Allure Reports) выполнив команду <code>./gradlew allureServe</code>.
+
 
 ### Необходимое ПО:
 1. Docker 
