@@ -160,7 +160,7 @@ public class UiTest {
     }
 
     @Test
-    void shouldCheckErrorFormatWhereYearMoreLimit30() { //Проверка при установке года больше, чем возможный срок карты +5 лет от настоящего
+    void shouldCheckErrorFormatWhereYearMoreLimit30() {
         val mainPage = new MainPage();
         val CardData = mainPage.selectByCreditCard();
         val invalidCardInfo = DataHelper.getCardInfoWithWrongYearMoreLimit();

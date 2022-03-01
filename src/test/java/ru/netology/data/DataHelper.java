@@ -7,12 +7,8 @@ import java.util.Locale;
 
 public class DataHelper {
     static Faker faker = new Faker(new Locale("en"));
-    //    static Random random = new Random();
-    //    static int cvc = (int) (100 + Math.random() * 899);
     static String correctCVC = Integer.toString((int) (100 + Math.random() * 899));
-    //    static int monthNumber = (int) (1 + Math.random()*8);
     static String wrongMonthNumber = Integer.toString((int) (1 + Math.random() * 8));
-    //    static int year = (int) (15 + Math.random() * 6);
     static String wrongYear = Integer.toString((int) (15 + Math.random() * 6));
 
     public DataHelper() {
